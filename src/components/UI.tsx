@@ -237,9 +237,25 @@ export function HospitalBanner({ compact = false }: { compact?: boolean }) {
 }
 
 export function HospitalReferencePhoto() {
+  const { hospital } = useHospital();
+  if (!hospital) return null;
+  const regional = regionals.find((r) => r.id === hospital.regionalId)?.name;
   return (
-    <div className="reference-photo" aria-label="Hospital Maranhense">
-      <img src={hospitalReference} alt="Hospital Maranhense" />
+    <div
+      className="reference-hospital"
+      aria-label={`Dados de ${hospital.name}`}
+    >
+      <div className="reference-photo">
+        <img src={hospitalReference} alt="Hospital Maranhense" />
+      </div>
+      <div className="reference-location">
+        <span>
+          <MapPin /> {hospital.city} - MA
+        </span>
+        <span>
+          <Building2 /> Regional: {regional}
+        </span>
+      </div>
     </div>
   );
 }

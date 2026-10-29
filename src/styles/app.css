@@ -2687,6 +2687,30 @@ tfoot td {
   overflow: hidden;
   flex-shrink: 0;
 }
+.reference-hospital {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+.reference-location {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.reference-location span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.reference-location svg {
+  width: 17px;
+  height: 17px;
+  color: #0076ff;
+}
 .reference-photo img {
   display: block;
   width: 100%;
@@ -2705,6 +2729,13 @@ tfoot td {
     width: 230px;
     height: 63px;
   }
+  .reference-hospital {
+    gap: 11px;
+  }
+  .reference-location {
+    font-size: 12px;
+    gap: 9px;
+  }
 }
 @media (max-width: 900px) {
   .brand-reference {
@@ -2712,6 +2743,9 @@ tfoot td {
     height: 76px;
   }
   .reference-photo {
+    display: none;
+  }
+  .reference-location {
     display: none;
   }
 }
