@@ -22,6 +22,7 @@ import type { LucideIcon } from "lucide-react";
 import { useHospital, useApp } from "../state/AppContext";
 import { periods, regionals } from "../data/demo";
 import { periodName } from "../utils/calculations";
+import hospitalReference from "../assets/hospital-reference.png";
 export function Panel({
   title,
   icon: Icon,
@@ -88,7 +89,7 @@ export function Stat({
 }
 export function Badge({ status }: { status: string }) {
   const style =
-    status === "Ativo" || status === "Operacional"
+    status === "Ativo" || status === "Operacional" || status === "Unidade Ativa"
       ? "green"
       : status === "Inativo"
         ? "gray"
@@ -202,16 +203,8 @@ export function HospitalBanner({ compact = false }: { compact?: boolean }) {
   );
   return (
     <div className={`hospital-banner ${compact ? "compact" : ""}`}>
-      <div
-        className="hospital-placeholder"
-        title="Espaço reservado à fotografia original da unidade"
-      >
-        <Building2 />
-        <span>
-          Hospital
-          <br />
-          <b>{hospital.name.replace("Hospital ", "")}</b>
-        </span>
+      <div className="hospital-placeholder">
+        <img src={hospitalReference} alt="Hospital Maranhense" />
       </div>
       <div className="hospital-info">
         <h2>{hospital.name}</h2>
@@ -226,13 +219,27 @@ export function HospitalBanner({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
       <div className="hospital-state">
-        <Badge status={hospital.status} />
+        <Badge
+          status={
+            hospital.status === "Ativo" ? "Unidade Ativa" : hospital.status
+          }
+        />
         <small>
           {last
             ? `Atualização local: ${new Date(last.date).toLocaleString("pt-BR")}`
-            : "Base demonstrativa · referência visual"}
+            : hospital.id === "HM001"
+              ? "Última atualização: 15/04/2025 às 10:30"
+              : "Base demonstrativa · referência visual"}
         </small>
       </div>
+    </div>
+  );
+}
+
+export function HospitalReferencePhoto() {
+  return (
+    <div className="reference-photo" aria-label="Hospital Maranhense">
+      <img src={hospitalReference} alt="Hospital Maranhense" />
     </div>
   );
 }

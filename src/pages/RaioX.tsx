@@ -10,13 +10,7 @@ import {
   Clock3,
 } from "lucide-react";
 import { useHospital } from "../state/AppContext";
-import {
-  Panel,
-  Stat,
-  HospitalBanner,
-  HospitalSelect,
-  Empty,
-} from "../components/UI";
+import { Panel, Stat, HospitalBanner, Empty } from "../components/UI";
 import { Donut } from "../components/Charts";
 import {
   split,
@@ -41,6 +35,9 @@ export function RaioX() {
   const acesso = split(records, "acesso"),
     vig = split(records, "vigilancia"),
     totals = categoryTotals(records),
+    chartTotals = totals.filter(
+      (item) => item.key === "vigilancia" || item.key === "acesso",
+    ),
     total = cost(records);
   const groups = [
     ...["Diurno", "Noturno"].map((s) => ({
@@ -73,7 +70,6 @@ export function RaioX() {
     <>
       <div className="page-title">
         <h1>Raio-X do Hospital</h1>
-        <HospitalSelect />
       </div>
       <HospitalBanner />
       <div className="stats raio-stats">
@@ -309,7 +305,7 @@ export function RaioX() {
         <div className="stack">
           <Panel title="Custo mensal por serviço" icon={Clock3}>
             <Donut
-              items={totals}
+              items={chartTotals}
               onSelect={(k) =>
                 navigate(categoryRoutes[k as keyof typeof categoryRoutes])
               }

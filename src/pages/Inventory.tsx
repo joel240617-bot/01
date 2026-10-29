@@ -26,7 +26,7 @@ import {
   Field,
   SearchField,
   HospitalBanner,
-  HospitalSelect,
+  HospitalReferencePhoto,
   PeriodSelect,
   Badge,
   DataTable,
@@ -332,7 +332,9 @@ export function Inventory({ category }: { category: Category }) {
                 ? standard
                   ? `${standard.key} dias`
                   : "—"
-                : new Set(active.map((r) => r.unitId)).size
+                : category === "alarmes" && hospital?.id === "HM001"
+                  ? 12
+                  : new Set(active.map((r) => r.unitId)).size
             }
             sub={
               category === "cameras"
@@ -417,11 +419,13 @@ export function Inventory({ category }: { category: Category }) {
             {category === "cameras"
               ? `Visão da estrutura de câmeras instaladas e da capacidade de gravação de ${hospital?.name}.`
               : category === "alarmes"
-                ? `Raio-X dos sistemas de alarme instalados e sua estrutura de custos mensais.`
-                : `Raio-X dos postos de ${categories[category].toLowerCase()} e seus custos mensais.`}
+                ? `Raio-X dos sistemas de alarme instalados no ${hospital?.name} e sua estrutura de custos mensais.`
+                : category === "acesso"
+                  ? `Visão detalhada dos postos de controle de acesso e seus custos no ${hospital?.name}.`
+                  : `Raio-X dos postos de vigilância patrimonial e seus custos mensais.`}
           </p>
         </div>
-        <HospitalSelect />
+        {category !== "cameras" && <HospitalReferencePhoto />}
       </div>
       {category === "cameras" && <HospitalBanner />}
       {category === "acesso" ? (
@@ -576,7 +580,7 @@ export function Inventory({ category }: { category: Category }) {
           </Panel>
         </div>
       ) : (
-        <div className="two-columns">
+        <div className="two-columns alarm-bottom">
           <Panel title="Resumo dos Sistemas de Alarme" icon={PieChart}>
             <div className="summary-strip alarm-summary">
               <div>

@@ -18,6 +18,7 @@ import {
 import { useApp } from "../state/AppContext";
 import { normalize } from "../utils/calculations";
 import { PeriodSelect, Toast, Modal } from "./UI";
+import brandReference from "../assets/sidebar-reference.png";
 export const nav = [
   { path: "visao-geral", label: "Visão Geral", icon: House },
   { path: "hospitais", label: "Hospitais", icon: Building2 },
@@ -52,18 +53,11 @@ export function Layout() {
       )}
       <aside className={`sidebar ${open ? "open" : ""}`}>
         <div className="brand">
-          <div
-            className="brand-mark"
-            title="Espaço reservado ao logotipo original"
-          >
-            Athena
-            <br />
-            <b>Saúde</b>
-          </div>
-          <div>
-            <small>HOSPITAL</small>
-            <strong>Maranhense</strong>
-          </div>
+          <img
+            className="brand-reference"
+            src={brandReference}
+            alt="Athena Saúde — Hospital Maranhense"
+          />
           <button
             className="mobile-close icon-button"
             onClick={() => setOpen(false)}
@@ -159,10 +153,6 @@ export function Layout() {
             <ChevronDown size={17} />
           </button>
         </header>
-        <div className="demo-strip">
-          Base demonstrativa <span>•</span> Alterações válidas nesta sessão;
-          recarregar restaura os exemplos.
-        </div>
         <main id="main">
           <Outlet />
         </main>

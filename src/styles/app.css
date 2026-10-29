@@ -2656,6 +2656,71 @@ tfoot td {
     scroll-behavior: auto !important;
   }
 }
+
+/* The reference screens use the original brand lockup and hospital photograph. */
+.brand-reference {
+  display: block;
+  width: 220px;
+  height: 76px;
+  object-fit: cover;
+  object-position: left top;
+  margin-left: -2px;
+}
+.hospital-placeholder {
+  width: 329px;
+  height: 88px;
+  min-height: 88px;
+  padding: 0;
+  overflow: hidden;
+  border-right: 0;
+}
+.hospital-placeholder img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.reference-photo {
+  width: 257px;
+  height: 70px;
+  border-radius: 7px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.reference-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 1450px) {
+  .brand-reference {
+    width: 205px;
+    height: 71px;
+  }
+  .hospital-placeholder {
+    width: 280px;
+  }
+  .reference-photo {
+    width: 230px;
+    height: 63px;
+  }
+}
+@media (max-width: 900px) {
+  .brand-reference {
+    width: 220px;
+    height: 76px;
+  }
+  .reference-photo {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .brand-reference {
+    width: 205px;
+    height: 71px;
+  }
+}
 /* Refinamento de densidade a partir das referências de 1672 × 941. */
 @media (min-width: 901px) {
   .demo-strip {
@@ -2670,7 +2735,7 @@ tfoot td {
     z-index: 1;
   }
   main {
-    padding-top: 20px;
+    padding-top: 16px;
   }
   .raio-stats .stat {
     padding-top: 12px;
@@ -2755,13 +2820,30 @@ tfoot td {
     min-height: 135px;
   }
   .raio-grid td {
-    padding: 4px 8px;
+    padding: 3px 8px;
+  }
+  .raio-grid th {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
   .raio-grid .two-columns .cell-sub {
     font-size: 9px;
   }
   .overview-bottom .ranking {
     min-height: 260px;
+  }
+}
+
+@media (min-width: 901px) {
+  .alarm-bottom .donut-layout {
+    gap: 10px;
+  }
+  .alarm-bottom .donut {
+    width: 160px;
+  }
+  .alarm-bottom .chart-legend button {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 }
 .inventory-actions {
@@ -2809,7 +2891,7 @@ tfoot td {
     display: none;
   }
   .raio-grid .two-columns td {
-    padding: 5px 8px;
+    padding: 3px 8px;
   }
   .raio-grid .summary-strip {
     min-height: 83px;
