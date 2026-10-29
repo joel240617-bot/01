@@ -12,13 +12,16 @@ export function Donut({
   totalLabel = "Total mensal",
   currency = true,
   onSelect,
+  centerTotal,
 }: {
   items: { key: string; label: string; value: number }[];
   totalLabel?: string;
   currency?: boolean;
   onSelect?: (key: string) => void;
+  centerTotal?: number;
 }) {
   const total = items.reduce((s, i) => s + i.value, 0);
+  const displayedTotal = centerTotal ?? total;
   let cumulative = 0;
   return (
     <div className="donut-layout">
@@ -59,7 +62,7 @@ export function Donut({
           })}
         </svg>
         <div className="donut-center">
-          <strong>{currency ? money(total) : total}</strong>
+          <strong>{currency ? money(displayedTotal) : displayedTotal}</strong>
           <span>{totalLabel}</span>
         </div>
       </div>

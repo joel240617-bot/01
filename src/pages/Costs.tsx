@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useHospital } from "../state/AppContext";
 import { periods } from "../data/demo";
-import { categories, billingLabels } from "../types";
+import { categories } from "../types";
 import type { Category } from "../types";
 import {
   Panel,
@@ -19,10 +19,8 @@ import {
   Field,
   HospitalSelect,
   PeriodSelect,
-  DataTable,
 } from "../components/UI";
 import { Donut, CostBars } from "../components/Charts";
-import { RecordActions } from "../components/RecordEditor";
 import {
   cost,
   money,
@@ -30,7 +28,6 @@ import {
   quantity,
   categoryTotals,
   percent,
-  monthlyCost,
   periodName,
 } from "../utils/calculations";
 export function Costs() {
@@ -68,7 +65,7 @@ export function Costs() {
     );
   return (
     <>
-      <div className="page-title">
+      <div className="page-title costs-title">
         <div>
           <h1>Custos</h1>
           <p>
@@ -170,7 +167,11 @@ export function Costs() {
           />
         </Panel>
       </div>
-      <Panel title="Detalhamento dos custos por categoria" icon={ClipboardList}>
+      <Panel
+        className="cost-detail"
+        title="Detalhamento dos custos por categoria"
+        icon={ClipboardList}
+      >
         <div className="table-scroll">
           <table>
             <thead>
@@ -213,53 +214,6 @@ export function Costs() {
             </tfoot>
           </table>
         </div>
-      </Panel>
-      <Panel title="Valores unitários e memória de cálculo" icon={Database}>
-        <DataTable
-          rows={selected}
-          label="Memória de cálculo"
-          columns={[
-            {
-              key: "description",
-              label: "Registro",
-              render: (r) => r.description,
-              sort: (r) => r.description,
-            },
-            {
-              key: "category",
-              label: "Categoria",
-              render: (r) => categories[r.category],
-            },
-            {
-              key: "billing",
-              label: "Unidade de cobrança",
-              render: (r) => billingLabels[r.billing],
-            },
-            {
-              key: "formula",
-              label: "Cálculo mensal",
-              render: (r) =>
-                r.status === "Inativo"
-                  ? "Registro inativo"
-                  : r.billing === "mensalidade"
-                    ? `${money(r.unitValue)} / mês`
-                    : r.billing === "hora"
-                      ? `${r.quantity} × ${r.hours}h × ${money(r.unitValue)}`
-                      : `${r.quantity} × ${money(r.unitValue)}`,
-            },
-            {
-              key: "total",
-              label: "Custo Mensal",
-              render: (r) => <b>{money(monthlyCost(r))}</b>,
-              sort: (r) => monthlyCost(r),
-            },
-            {
-              key: "actions",
-              label: "Ações",
-              render: (r) => <RecordActions record={r} />,
-            },
-          ]}
-        />
       </Panel>
     </>
   );

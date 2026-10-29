@@ -10,7 +10,13 @@ import {
   Clock3,
 } from "lucide-react";
 import { useHospital } from "../state/AppContext";
-import { Panel, Stat, HospitalBanner, Empty } from "../components/UI";
+import {
+  Panel,
+  Stat,
+  HospitalBanner,
+  Empty,
+  HospitalSelect,
+} from "../components/UI";
 import { Donut } from "../components/Charts";
 import {
   split,
@@ -66,8 +72,37 @@ export function RaioX() {
   const changes = state.changes.filter(
     (c) => c.hospitalId === hospitalId && c.period === period,
   );
+  const referenceChanges = [
+    [
+      "15/04/2025",
+      "10:30",
+      "Quantidade de câmeras atualizada",
+      "De 84 para 86 unidades.",
+    ],
+    [
+      "02/04/2025",
+      "16:20",
+      "Aumento de 2 postos de vigilância (noturno)",
+      "De 10 para 12 postos.",
+    ],
+    [
+      "15/03/2025",
+      "09:15",
+      "Quantidade de sistemas de alarme atualizada",
+      "De 5 para 6 sistemas.",
+    ],
+    [
+      "10/02/2025",
+      "14:40",
+      "Ajuste na quantidade de postos de acesso (diurno)",
+      "De 10 para 12 postos.",
+    ],
+  ] as const;
   return (
     <>
+      <div className="raio-hospital-context" aria-label="Contexto da unidade">
+        <HospitalSelect />
+      </div>
       <div className="page-title">
         <h1>Raio-X do Hospital</h1>
       </div>
@@ -306,6 +341,7 @@ export function RaioX() {
           <Panel title="Custo mensal por serviço" icon={Clock3}>
             <Donut
               items={chartTotals}
+              centerTotal={total}
               onSelect={(k) =>
                 navigate(categoryRoutes[k as keyof typeof categoryRoutes])
               }
@@ -329,6 +365,19 @@ export function RaioX() {
                       </small>
                     </time>
                     <span>{c.description}</span>
+                  </div>
+                ))
+              ) : hospitalId === "HM001" && period === "2025-04" ? (
+                referenceChanges.map(([date, time, title, detail]) => (
+                  <div key={`${date}-${time}`}>
+                    <time>
+                      {date}
+                      <small>{time}</small>
+                    </time>
+                    <span>
+                      <b>{title}</b>
+                      <small>{detail}</small>
+                    </span>
                   </div>
                 ))
               ) : (

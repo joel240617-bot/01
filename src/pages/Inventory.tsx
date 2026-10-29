@@ -143,13 +143,15 @@ export function Inventory({ category }: { category: Category }) {
           },
           {
             key: "hours",
-            label: "Cobrança",
+            label: "Jornada",
             render: (r: SecurityRecord) =>
-              r.billing === "hora"
-                ? `${r.hours}h / mês`
-                : r.billing === "mensalidade"
-                  ? "Mensalidade"
-                  : "Por posto / mês",
+              r.billing === "posto"
+                ? r.shift === "Diurno"
+                  ? "12h (06h às 18h)"
+                  : "12h (18h às 06h)"
+                : r.billing === "hora"
+                  ? `${r.hours}h / mês`
+                  : "Mensalidade",
           },
         ]
       : []),
@@ -185,7 +187,7 @@ export function Inventory({ category }: { category: Category }) {
       render: (r) => (
         <span>
           {money(r.unitValue)}
-          {r.billing === "mensalidade" && (
+          {r.billing === "mensalidade" && category !== "alarmes" && (
             <small className="cell-sub">mensalidade fixa</small>
           )}
         </span>
@@ -216,6 +218,15 @@ export function Inventory({ category }: { category: Category }) {
   ];
   const filters = (
     <div className="filter-panel">
+      {isPost && category === "acesso" ? (
+        <Field label="Turno">
+          <select value={shift} onChange={(e) => setShift(e.target.value)}>
+            <option value="">Todos os turnos</option>
+            <option>Diurno</option>
+            <option>Noturno</option>
+          </select>
+        </Field>
+      ) : null}
       <Field label={isPost ? "Setor / Local" : "Localização"}>
         <select value={unit} onChange={(e) => setUnit(e.target.value)}>
           <option value="">Todos os locais</option>
@@ -226,25 +237,29 @@ export function Inventory({ category }: { category: Category }) {
           ))}
         </select>
       </Field>
-      <Field label={isPost ? "Turno" : "Tipo"}>
-        {isPost ? (
-          <select value={shift} onChange={(e) => setShift(e.target.value)}>
-            <option value="">Todos os turnos</option>
-            <option>Diurno</option>
-            <option>Noturno</option>
-          </select>
-        ) : (
-          <select value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="">Todos os tipos</option>
-            {[...new Set(list.map((r) => r.type))].map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-        )}
-      </Field>
-      <Field label="Situação">
+      {!(isPost && category === "acesso") && (
+        <Field label={isPost ? "Turno" : "Tipo"}>
+          {isPost ? (
+            <select value={shift} onChange={(e) => setShift(e.target.value)}>
+              <option value="">Todos os turnos</option>
+              <option>Diurno</option>
+              <option>Noturno</option>
+            </select>
+          ) : (
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="">Todos os tipos</option>
+              {[...new Set(list.map((r) => r.type))].map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+          )}
+        </Field>
+      )}
+      <Field label={isPost ? "Status" : "Situação"}>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="">Todas as situações</option>
+          <option value="">
+            {isPost ? "Todos os status" : "Todas as situações"}
+          </option>
           <option>Ativo</option>
           <option>Em manutenção</option>
           <option>Inativo</option>
@@ -253,7 +268,7 @@ export function Inventory({ category }: { category: Category }) {
       <Field label="Competência">
         <PeriodSelect />
       </Field>
-      <Field label="Buscar registro">
+      <Field label={isPost ? "Buscar posto" : "Buscar registro"}>
         <SearchField
           value={search}
           onChange={setSearch}
@@ -293,7 +308,7 @@ export function Inventory({ category }: { category: Category }) {
             label="Custo Médio por Posto"
             icon={Database}
             value={money(totals.total ? totals.cost / totals.total : 0)}
-            sub="por posto (mês)"
+            sub="por posto/mês"
           />
         </>
       ) : (
@@ -348,15 +363,22 @@ export function Inventory({ category }: { category: Category }) {
         label={isPost ? "Custo Mensal Total" : "Custo Mensal"}
         icon={Database}
         value={money(totalCost)}
-        sub="total da unidade"
+        sub={
+          isPost
+            ? category === "acesso"
+              ? "com controle de acesso"
+              : "com vigilância patrimonial"
+            : "total da unidade"
+        }
       />
     </div>
   );
   const table = (
     <Panel
+      className={`inventory-table ${category}`}
       title={
         isPost
-          ? `Postos de ${categories[category]}`
+          ? `Postos de ${categories[category]}${category === "acesso" ? ` (${totals.total})` : ""}`
           : category === "cameras"
             ? "Lista de Câmeras"
             : "Lista de Sistemas de Alarme"
@@ -380,7 +402,10 @@ export function Inventory({ category }: { category: Category }) {
               </button>
             </>
           )}
-          <button className="primary small-button" onClick={() => setNew(true)}>
+          <button
+            className={`primary small-button ${isPost ? "new-post-button" : ""}`}
+            onClick={() => setNew(true)}
+          >
             <Plus size={16} />{" "}
             {isPost
               ? "Novo posto"
@@ -396,6 +421,7 @@ export function Inventory({ category }: { category: Category }) {
         columns={columns}
         rows={filtered}
         label={categories[category]}
+        hidePagination={category === "cameras" || category === "alarmes"}
       />
     </Panel>
   );
@@ -406,7 +432,7 @@ export function Inventory({ category }: { category: Category }) {
   }));
   return (
     <>
-      <div className="page-title">
+      <div className={`page-title ${category}-title`}>
         <div>
           {isPost && (
             <div className="breadcrumbs">
@@ -425,7 +451,11 @@ export function Inventory({ category }: { category: Category }) {
                   : `Raio-X dos postos de vigilância patrimonial e seus custos mensais.`}
           </p>
         </div>
-        {category !== "cameras" && <HospitalReferencePhoto />}
+        {category !== "cameras" && (
+          <HospitalReferencePhoto
+            variant={category === "acesso" ? "access" : "default"}
+          />
+        )}
       </div>
       {category === "cameras" && <HospitalBanner />}
       {category === "acesso" ? (
@@ -467,6 +497,7 @@ export function Inventory({ category }: { category: Category }) {
       {isPost ? (
         <div className={category === "vigilancia" ? "two-columns" : "stack"}>
           <Panel
+            className="inventory-finance"
             title={`Resumo Financeiro ${category === "acesso" ? "do Controle de Acesso" : "da Vigilância"}`}
             icon={Database}
           >
@@ -536,7 +567,7 @@ export function Inventory({ category }: { category: Category }) {
           )}
         </div>
       ) : category === "cameras" ? (
-        <div className="overview-bottom">
+        <div className="overview-bottom camera-bottom">
           <Panel title="Total de Câmeras por Setor" icon={ChartNoAxesCombined}>
             <div className="sector-cards">
               {units
@@ -615,7 +646,7 @@ export function Inventory({ category }: { category: Category }) {
           </Panel>
         </div>
       )}
-      <p className="page-footnote">
+      <p className="page-footnote inventory-footnote">
         Indicadores referem-se ao hospital e à competência selecionados. Os
         filtros restringem a lista de registros.
       </p>

@@ -236,26 +236,32 @@ export function HospitalBanner({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function HospitalReferencePhoto() {
+export function HospitalReferencePhoto({
+  variant = "default",
+}: {
+  variant?: "default" | "access";
+}) {
   const { hospital } = useHospital();
   if (!hospital) return null;
   const regional = regionals.find((r) => r.id === hospital.regionalId)?.name;
   return (
     <div
-      className="reference-hospital"
+      className={`reference-hospital ${variant === "access" ? "reference-hospital-access" : ""}`}
       aria-label={`Dados de ${hospital.name}`}
     >
       <div className="reference-photo">
         <img src={hospitalReference} alt="Hospital Maranhense" />
       </div>
-      <div className="reference-location">
-        <span>
-          <MapPin /> {hospital.city} - MA
-        </span>
-        <span>
-          <Building2 /> Regional: {regional}
-        </span>
-      </div>
+      {variant !== "access" && (
+        <div className="reference-location">
+          <span>
+            <MapPin /> {hospital.city} - MA
+          </span>
+          <span>
+            <Building2 /> Regional: {regional}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -331,11 +337,13 @@ export function DataTable<T extends { id: string }>({
   columns,
   initialPageSize = 10,
   label = "Registros",
+  hidePagination = false,
 }: {
   rows: T[];
   columns: Column<T>[];
   initialPageSize?: number;
   label?: string;
+  hidePagination?: boolean;
 }) {
   const [sort, setSort] = useState<{ key: string; dir: number }>({
     key: "",
@@ -410,43 +418,45 @@ export function DataTable<T extends { id: string }>({
               </tbody>
             </table>
           </div>
-          <div className="pagination">
-            <span>
-              Mostrando {(safePage - 1) * size + 1} a{" "}
-              {Math.min(safePage * size, rows.length)} de {rows.length}{" "}
-              registros
-            </span>
-            <div>
-              <label>
-                Itens por página{" "}
-                <select
-                  value={size}
-                  onChange={(e) => setSize(Number(e.target.value))}
+          {!hidePagination && (
+            <div className="pagination">
+              <span>
+                Mostrando {(safePage - 1) * size + 1} a{" "}
+                {Math.min(safePage * size, rows.length)} de {rows.length}{" "}
+                registros
+              </span>
+              <div>
+                <label>
+                  Itens por página{" "}
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(Number(e.target.value))}
+                  >
+                    {[8, 10, 20, 50].map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  className="icon-button"
+                  aria-label="Página anterior"
+                  disabled={safePage === 1}
+                  onClick={() => setPage(safePage - 1)}
                 >
-                  {[8, 10, 20, 50].map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
-              </label>
-              <button
-                className="icon-button"
-                aria-label="Página anterior"
-                disabled={safePage === 1}
-                onClick={() => setPage(safePage - 1)}
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <span className="page-number">{safePage}</span>
-              <button
-                className="icon-button"
-                aria-label="Próxima página"
-                disabled={safePage === pages}
-                onClick={() => setPage(safePage + 1)}
-              >
-                <ChevronRight size={18} />
-              </button>
+                  <ChevronLeft size={18} />
+                </button>
+                <span className="page-number">{safePage}</span>
+                <button
+                  className="icon-button"
+                  aria-label="Próxima página"
+                  disabled={safePage === pages}
+                  onClick={() => setPage(safePage + 1)}
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </>

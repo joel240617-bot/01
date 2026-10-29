@@ -1,6 +1,14 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Eye, Pencil, Power, Plus, Save, Info } from "lucide-react";
+import {
+  Eye,
+  Pencil,
+  Power,
+  Plus,
+  Save,
+  Info,
+  MoreVertical,
+} from "lucide-react";
 import { useHospital } from "../state/AppContext";
 import { categories, billingLabels } from "../types";
 import type {
@@ -376,31 +384,77 @@ export function RecordEditor({
 }
 export function RecordActions({ record }: { record: SecurityRecord }) {
   const [mode, setMode] = useState<"view" | "edit" | "status" | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { dispatch, period, notify, units } = useHospital();
+  const isPost =
+    record.category === "acesso" || record.category === "vigilancia";
   return (
     <>
-      <div className="row-actions">
+      <div
+        className={`row-actions ${isPost ? "post-actions" : ""} ${
+          record.category === "vigilancia" ? "vigilancia-actions" : ""
+        }`}
+      >
+        {isPost && (
+          <button
+            className="icon-button more-actions"
+            aria-label={`Mais ações de ${record.description}`}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <MoreVertical size={18} />
+          </button>
+        )}
         <button
-          className="icon-button"
+          className={`icon-button ${isPost ? "compat-action" : ""} ${
+            record.category === "vigilancia" ? "post-view-action" : ""
+          }`}
           aria-label={`Ver ${record.description}`}
           onClick={() => setMode("view")}
         >
           <Eye size={17} />
         </button>
         <button
-          className="icon-button"
+          className={`icon-button ${isPost ? "compat-action" : ""}`}
           aria-label={`Editar ${record.description}`}
           onClick={() => setMode("edit")}
         >
           <Pencil size={16} />
         </button>
         <button
-          className="icon-button"
+          className={`icon-button ${isPost ? "compat-action" : ""}`}
           aria-label={`${record.status === "Inativo" ? "Reativar" : "Inativar"} ${record.description}`}
           onClick={() => setMode("status")}
         >
           <Power size={16} />
         </button>
+        {isPost && menuOpen && (
+          <div className="row-action-menu">
+            <button
+              onClick={() => {
+                setMode("view");
+                setMenuOpen(false);
+              }}
+            >
+              Ver registro
+            </button>
+            <button
+              onClick={() => {
+                setMode("edit");
+                setMenuOpen(false);
+              }}
+            >
+              Editar registro
+            </button>
+            <button
+              onClick={() => {
+                setMode("status");
+                setMenuOpen(false);
+              }}
+            >
+              {record.status === "Inativo" ? "Reativar" : "Inativar"}
+            </button>
+          </div>
+        )}
       </div>
       {mode === "edit" && (
         <RecordEditor record={record} onClose={() => setMode(null)} />

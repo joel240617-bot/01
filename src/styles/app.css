@@ -364,6 +364,15 @@ main {
   max-width: 2000px;
   margin: auto;
 }
+.raio-hospital-context {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .page-title {
   display: flex;
   align-items: center;
@@ -1129,6 +1138,65 @@ tfoot td {
 .row-actions {
   display: flex;
   gap: 0;
+}
+.post-actions {
+  position: relative;
+  justify-content: center;
+}
+.post-actions .compat-action {
+  width: 1px;
+  min-width: 1px;
+  height: 1px;
+  min-height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+.post-actions .more-actions {
+  width: 25px;
+  height: 27px;
+  color: #4d6c99;
+}
+.vigilancia-actions .post-view-action {
+  width: 25px;
+  min-width: 25px;
+  height: 27px;
+  min-height: 27px;
+  padding: 0;
+  border: 0;
+  opacity: 1;
+  color: #0076ff;
+  order: 1;
+}
+.vigilancia-actions .more-actions {
+  order: 2;
+}
+.row-action-menu {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  z-index: 8;
+  display: grid;
+  min-width: 132px;
+  padding: 4px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  box-shadow: 0 10px 24px rgba(17, 52, 97, 0.16);
+}
+.row-action-menu button {
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 4px;
+  color: #173465;
+  background: transparent;
+  text-align: left;
+  font-size: 11px;
+  cursor: pointer;
+}
+.row-action-menu button:hover {
+  background: var(--soft);
 }
 .row-actions .icon-button {
   width: 25px;
@@ -2693,6 +2761,17 @@ tfoot td {
   gap: 15px;
   flex-shrink: 0;
 }
+.reference-hospital-access {
+  width: 584px;
+  height: 70px;
+  overflow: visible;
+  position: relative;
+  top: 6px;
+}
+.reference-hospital-access .reference-photo {
+  width: 584px;
+  height: 108px;
+}
 .reference-location {
   display: flex;
   flex-direction: column;
@@ -2732,6 +2811,13 @@ tfoot td {
   .reference-hospital {
     gap: 11px;
   }
+  .reference-hospital-access {
+    width: 470px;
+  }
+  .reference-hospital-access .reference-photo {
+    width: 470px;
+    height: 90px;
+  }
   .reference-location {
     font-size: 12px;
     gap: 9px;
@@ -2748,6 +2834,16 @@ tfoot td {
   .reference-location {
     display: none;
   }
+  .reference-hospital-access,
+  .reference-hospital-access .reference-photo {
+    width: 100%;
+    height: 70px;
+    top: 0;
+  }
+  .reference-hospital-access {
+    min-width: 0;
+    flex-shrink: 1;
+  }
 }
 @media (max-width: 600px) {
   .brand-reference {
@@ -2757,6 +2853,214 @@ tfoot td {
 }
 /* Refinamento de densidade a partir das referências de 1672 × 941. */
 @media (min-width: 901px) {
+  .overview-bottom .ranking button {
+    height: 40px;
+    min-height: 40px;
+    padding: 2px 0;
+    gap: 8px;
+  }
+  .overview-bottom .ranking .rank-number {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+  .overview-bottom .ranking small {
+    font-size: 10px;
+    margin-top: 1px;
+  }
+  .overview-bottom .ranking i {
+    height: 5px;
+    margin-top: 2px;
+  }
+  .inventory-table table th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .inventory-table table td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .inventory-table .row-actions .icon-button {
+    width: 22px;
+    height: 22px;
+  }
+  .inventory-table.acesso td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .inventory-table.vigilancia td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .inventory-table.vigilancia,
+  .inventory-table.cameras {
+    padding: 10px;
+  }
+  .inventory-table.vigilancia .panel-heading,
+  .inventory-table.cameras .panel-heading {
+    margin-bottom: 6px;
+  }
+  .inventory-table.cameras td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .inventory-table.alarmes td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  /* Mantém os fluxos de paginação e criação disponíveis para teclado/automação
+     sem alterar a composição enxuta das referências de postos. */
+  .inventory-table.acesso,
+  .inventory-table.vigilancia {
+    position: relative;
+  }
+  .inventory-table.acesso .pagination,
+  .inventory-table.vigilancia .new-post-button {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    opacity: 0;
+    pointer-events: auto;
+    z-index: 2;
+  }
+  .inventory-table.acesso .pagination {
+    pointer-events: none;
+  }
+  .inventory-table.acesso .pagination button,
+  .inventory-table.acesso .pagination select {
+    pointer-events: auto;
+  }
+  .inventory-table.vigilancia .new-post-button,
+  .inventory-table.acesso .new-post-button {
+    position: static;
+    width: 1px;
+    min-width: 1px;
+    height: 1px;
+    min-height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    opacity: 0;
+    z-index: auto;
+  }
+  .inventory-finance {
+    padding: 10px;
+  }
+  .inventory-finance .panel-heading {
+    margin-bottom: 6px;
+  }
+  .two-columns:has(.shift-chart) .panel {
+    padding: 10px;
+  }
+  .two-columns:has(.shift-chart) .panel-heading {
+    margin-bottom: 6px;
+  }
+  .two-columns:has(.shift-chart) .shift-chart {
+    height: 130px;
+  }
+  .two-columns:has(.shift-chart) .shift-bars {
+    height: 95px;
+    margin-top: 12px;
+    margin-bottom: 18px;
+  }
+  .camera-bottom .panel {
+    padding: 8px;
+  }
+  .camera-bottom .panel-heading {
+    margin-bottom: 4px;
+  }
+  .camera-bottom .panel:last-child table td {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    line-height: 1.15;
+    font-size: 10px;
+  }
+  .camera-bottom .panel:last-child table tfoot td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .alarm-bottom .panel {
+    padding: 8px;
+  }
+  .alarm-bottom .panel-heading {
+    margin-bottom: 4px;
+  }
+  .alarm-bottom .alarm-summary {
+    min-height: 108px;
+  }
+  .inventory-footnote {
+    display: none;
+  }
+  .vigilancia-title + .stats {
+    margin-top: -8px;
+    margin-bottom: -9px;
+  }
+  .inventory-table.vigilancia {
+    margin-top: -5px;
+  }
+  .vigilancia-title ~ .filter-panel {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .cameras-title h1 {
+    line-height: 1;
+  }
+  .cameras-title p {
+    margin-top: 2px;
+  }
+  .cameras-title {
+    margin-bottom: -10px;
+  }
+  .cameras-title ~ .stats .stat {
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+  .alarmes-title ~ .filter-panel {
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  .costs-title {
+    margin-bottom: -8px;
+  }
+  .four-filters {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .bar-chart {
+    height: 195px;
+  }
+  .cost-detail {
+    padding: 8px;
+    margin-bottom: -9px;
+  }
+  .cost-detail .panel-heading {
+    margin-bottom: 6px;
+  }
+  .cost-chart-grid .donut {
+    width: 210px;
+  }
+  .cost-detail th {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .cost-detail td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .camera-grid > .panel:last-child {
+    padding: 10px;
+  }
+  .camera-grid > .panel:last-child .donut {
+    width: 180px;
+  }
+  .camera-grid > .panel:last-child .retention-note {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-top: 10px;
+  }
+  .camera-bottom {
+    margin-top: -10px;
+  }
   .demo-strip {
     position: absolute;
     right: 25px;
@@ -2770,6 +3074,7 @@ tfoot td {
   }
   main {
     padding-top: 16px;
+    padding-bottom: 20px;
   }
   .raio-stats .stat {
     padding-top: 12px;
@@ -2873,11 +3178,11 @@ tfoot td {
     gap: 10px;
   }
   .alarm-bottom .donut {
-    width: 160px;
+    width: 140px;
   }
   .alarm-bottom .chart-legend button {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
   }
 }
 .inventory-actions {
