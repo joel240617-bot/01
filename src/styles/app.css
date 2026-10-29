@@ -2725,6 +2725,150 @@ tfoot td {
   }
 }
 
+/* Acabamento mobile: preserva a hierarquia visual e melhora leitura e toque. */
+@media (max-width: 600px) {
+  .topbar {
+    height: 98px;
+    align-items: flex-start;
+    position: relative;
+  }
+  .top-period {
+    display: flex;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 7px;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11px;
+  }
+  .top-period > span {
+    display: flex;
+    align-items: center;
+    color: var(--muted);
+  }
+  .top-period .select-icon {
+    flex: 1;
+    max-width: 220px;
+  }
+  .top-period select {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    font-size: 12px;
+  }
+  .primary,
+  .secondary {
+    min-height: 44px;
+  }
+  .small-button {
+    min-height: 40px;
+  }
+  .table-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #9db9d8 transparent;
+    overscroll-behavior-inline: contain;
+    box-shadow: inset -16px 0 18px -20px #154d83;
+  }
+  .pagination .icon-button {
+    width: 38px;
+    height: 38px;
+  }
+  .pagination select {
+    min-height: 38px;
+  }
+  .row-actions .icon-button,
+  .post-actions .more-actions,
+  .vigilancia-actions .post-view-action {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    min-height: 32px;
+  }
+  .post-actions .compat-action {
+    width: 1px;
+    min-width: 1px;
+    height: 1px;
+    min-height: 1px;
+  }
+}
+
+@media (max-width: 420px) {
+  .topbar {
+    padding-left: 10px;
+    padding-right: 10px;
+    gap: 7px;
+  }
+  .global-search {
+    padding-left: 7px;
+    padding-right: 7px;
+    gap: 6px;
+  }
+  .global-search input {
+    font-size: 11px;
+  }
+  main {
+    padding: 14px 10px 24px;
+  }
+  .page-title {
+    gap: 8px;
+  }
+  .page-title h1 {
+    font-size: 27px;
+  }
+  .page-title p {
+    line-height: 1.4;
+  }
+  .breadcrumbs {
+    flex-wrap: wrap;
+    gap: 5px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .filter-panel,
+  .four-filters,
+  .hospital-filters,
+  .page-title .title-filters {
+    grid-template-columns: 1fr;
+  }
+  .filter-panel,
+  .four-filters,
+  .hospital-filters {
+    gap: 11px;
+    padding: 12px;
+  }
+  .filter-panel .field:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .panel {
+    padding: 12px;
+  }
+  .panel-heading {
+    gap: 8px;
+  }
+  .panel-heading h2 {
+    line-height: 1.25;
+  }
+  .five-stats .stat,
+  .cost-stats .stat {
+    min-height: 118px;
+  }
+  .cost-stats .stat {
+    min-height: 136px;
+  }
+  .cost-stats .stat-value {
+    font-size: 22px !important;
+  }
+  .summary-strip {
+    gap: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .summary-strip b {
+    font-size: 23px;
+  }
+}
+
 /* The reference screens use the original brand lockup and hospital photograph. */
 .brand-reference {
   display: block;
